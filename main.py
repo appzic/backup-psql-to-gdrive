@@ -6,11 +6,11 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 
-def backup_postgresql(db_name, db_user, db_password, db_host):
+def backup_postgresql(db_name, db_user, db_password, db_host, db_port=5432):
     os.environ['PGPASSWORD'] = db_password
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     backup_file = f'{db_name}_{timestamp}.sql'
-    dump_command = f'pg_dump -h {db_host} -U {db_user} -d {db_name} --format=p --no-owner --no-privileges > {backup_file}'
+    dump_command = f'pg_dump -h {db_host} -U {db_user} -d {db_name} -p {db_port} --format=p --no-owner --no-privileges  > {backup_file}'
     subprocess.call(dump_command, shell=True)
     del os.environ['PGPASSWORD']
     return backup_file
@@ -59,6 +59,7 @@ if __name__ == "__main__":
     db_user = env_vars['DB_USER']
     db_password = env_vars['DB_PASSWORD']
     db_host = env_vars['DB_HOST']
+    db_port = env_vars.get('DB_PORT', 5432)
     gdrive_folder_id = env_vars['GDRIVE_FOLDER_ID']
 
     gdrive_auth_key = env_vars['GDRIVE_AUTH_KEY']
@@ -66,5 +67,5 @@ if __name__ == "__main__":
     with open('credentials.json', 'w') as f:
         f.write(gdrive_auth_key)
 
-    backup_file = backup_postgresql(db_name, db_user, db_password, db_host)
+    backup_file = backup_postgresql(db_name, db_user, db_password, db_host, db_port)
     upload_to_gdrive(backup_file, gdrive_folder_id)
