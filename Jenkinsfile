@@ -48,6 +48,7 @@ pipeline {
     post {
         always {
             echo "🔄 The pipeline has finished, regardless of the final result."
+            cleanWs()
         }
         success {
             echo "🎉 Congratulations! The pipeline executed successfully from start to finish."
