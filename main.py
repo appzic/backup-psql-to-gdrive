@@ -10,9 +10,10 @@ def backup_postgresql(db_name, db_user, db_password, db_host, db_port=5432):
     os.environ['PGPASSWORD'] = db_password
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     backup_file = f'{db_name}_{timestamp}.sql'
-    dump_command = f'pg_dump -h {db_host} -U {db_user} -d {db_name} -p {db_port} --format=p --no-owner --no-privileges  > {backup_file}'
+    dump_command = f'pg_dump -h {db_host} -U {db_user} -d {db_name} -p {db_port} --no-owner --no-privileges --inserts  > {backup_file}'
     subprocess.call(dump_command, shell=True)
     del os.environ['PGPASSWORD']
+    print(f'Backup created: {backup_file}')
     return backup_file
 
 def upload_to_gdrive(file_path, gdrive_folder_id):
