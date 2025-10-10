@@ -31,13 +31,21 @@ def upload_to_gdrive(file_path, gdrive_folder_id):
         file_metadata = {'name': file_path, 'parents': [gdrive_folder_id]}
         media = MediaFileUpload(file_path, mimetype='application/sql')
         file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+        
+        if file:
+            file_id = file.get('id')
+            print(f'File {file_path} uploaded to Google Drive with ID: {file_id}')
+            return file_id
+        else:
+            print(f'Failed to upload {file_path} - no file object returned')
+            return None
 
     except HttpError as error:
-        print(F'An error occurred: {error}')
-        file = None
-
-    return file.get('id')
-    print(f'File {file_path} uploaded to Google Drive.')
+        print(f'An error occurred: {error}')
+        return None
+    except Exception as error:
+        print(f'An unexpected error occurred: {error}')
+        return None
 
 if __name__ == "__main__":
     required_env_vars = [
