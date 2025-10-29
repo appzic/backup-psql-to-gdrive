@@ -78,7 +78,7 @@ if __name__ == "__main__":
     gdrive_auth_key = gdrive_auth_key.strip("'")
     with open('credentials.json', 'w') as f:
         f.write(gdrive_auth_key)
-    gdrive_auth_domain_wide_delegation = env_vars['GDRIVE_AUTH_DOMAIN_WIDE_DELEGATION']
+    gdrive_auth_domain_wide_delegation = os.getenv('GDRIVE_AUTH_DOMAIN_WIDE_DELEGATION')
 
     backup_file = backup_postgresql(db_name, db_user, db_password, db_host, db_port)
     upload_to_gdrive(backup_file, gdrive_folder_id, gdrive_auth_domain_wide_delegation)
