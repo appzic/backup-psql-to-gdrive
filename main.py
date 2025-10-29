@@ -16,7 +16,7 @@ def backup_postgresql(db_name, db_user, db_password, db_host, db_port=5432):
     print(f'Backup created: {backup_file}')
     return backup_file
 
-def upload_to_gdrive(file_path, gdrive_folder_id):
+def upload_to_gdrive(file_path, gdrive_folder_id, gdrive_auth_domain_wide_delegation = None):
     
     SCOPES = ['https://www.googleapis.com/auth/drive']
     SERVICE_ACCOUNT_FILE = './credentials.json'
@@ -25,6 +25,9 @@ def upload_to_gdrive(file_path, gdrive_folder_id):
         SERVICE_ACCOUNT_FILE,
         scopes=SCOPES
     )
+
+    if gdrive_auth_domain_wide_delegation:
+        credentials = credentials.with_subject(gdrive_auth_domain_wide_delegation)
 
     try:
         service = build('drive', 'v3', credentials=credentials)
@@ -75,6 +78,7 @@ if __name__ == "__main__":
     gdrive_auth_key = gdrive_auth_key.strip("'")
     with open('credentials.json', 'w') as f:
         f.write(gdrive_auth_key)
+    gdrive_auth_domain_wide_delegation = env_vars['GDRIVE_AUTH_DOMAIN_WIDE_DELEGATION']
 
     backup_file = backup_postgresql(db_name, db_user, db_password, db_host, db_port)
-    upload_to_gdrive(backup_file, gdrive_folder_id)
+    upload_to_gdrive(backup_file, gdrive_folder_id, gdrive_auth_domain_wide_delegation)
