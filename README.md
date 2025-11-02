@@ -23,6 +23,7 @@ This project provides a Dockerized solution to back up a PostgreSQL database and
    - `DB_PORT`: Your PostgreSQL database port (default is 5432)
    - `GDRIVE_FOLDER_ID`: Your Google Drive folder ID where the backup will be uploaded
    - `GDRIVE_AUTH_KEY`: Path to your Google Drive service account credentials JSON file
+   - `GDRIVE_AUTH_DOMAIN_WIDE_DELEGATION`: Your Google Workspace domain (if using domain-wide delegation) (optional)
 
 ## Usage
 
