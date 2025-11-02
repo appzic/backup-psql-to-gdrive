@@ -1,14 +1,15 @@
 pipeline {
     environment {
-        IMAGE_NAME = 'appzic/backup-psql-to-gdrive:latest'
+        IMAGE_NAME = 'appzic/backup-psql-to-gdrive'
         DOCKERHUB_CREDENTIALS = credentials('APPZIC_DOCKERHUB_CREDENTIALS')
+        VERSION = '1.0.0'
     }
     agent any
     stages {
         stage("Build Docker Image") {
             steps {
                 script {
-                    sh 'docker build -t $IMAGE_NAME .'
+                    sh 'docker build -t $IMAGE_NAME:$VERSION .'
                 }
             }
             post {
@@ -28,7 +29,8 @@ pipeline {
                 script {
                     sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                    docker push $IMAGE_NAME
+                    docker push $IMAGE_NAME:$VERSION
+                    docker logout
                     '''
                 }
             }
