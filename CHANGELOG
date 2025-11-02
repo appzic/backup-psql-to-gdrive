@@ -1,0 +1,17 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [1.0.0] - 2025-11-02
+
+### Added
+- Initial release
+- PostgreSQL database backup using `pg_dump`
+- Automatic upload to Google Drive
+- Timestamped backup files
+- Docker support
+- Environment variable configuration
+- Service account authentication
+- Domain-wide delegation support (optional)
+
+[1.0.0]: https://github.com/appzic/backup-psql-to-gdrive/releases/tag/v1.0.0
